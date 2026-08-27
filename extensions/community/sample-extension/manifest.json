@@ -1,0 +1,30 @@
+{
+  "id": "sample-extension",
+  "name": "Sample Extension",
+  "version": "1.0.0",
+  "author": "your-username",
+  "description": "A template for creating new Solara extensions",
+  "minAppVersion": "1.10.0",
+  "permissions": ["storage"],
+  "hostPermissions": ["<all_urls>"],
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "contentScripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "css": ["styles.css"]
+    }
+  ],
+  "optionsUi": {
+    "page": "options.html",
+    "openInTab": false
+  },
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  }
+}
