@@ -1,0 +1,26 @@
+{
+  "id": "darkmoder",
+  "name": "DarkModer",
+  "version": "1.17.0",
+  "author": "Solara Team",
+  "description": "Forces dark mode on all websites",
+  "minAppVersion": "1.10.0",
+  "permissions": ["storage", "activeTab"],
+  "hostPermissions": ["<all_urls>"],
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "contentScripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "css": ["styles.css"],
+      "runAt": "document_start"
+    }
+  ],
+  "optionsUi": {
+    "page": "options.html",
+    "openInTab": false
+  }
+}
