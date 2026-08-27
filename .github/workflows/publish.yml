@@ -1,0 +1,38 @@
+name: Publish Extensions
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'extensions/**'
+
+jobs:
+  publish:
+    name: Publish Extensions
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build extension index
+        run: |
+          mkdir -p dist
+          echo '{"extensions":[' > dist/extensions.json
+          first=true
+          for ext in extensions/*/; do
+            if [ -f "$ext/manifest.json" ]; then
+              if [ "$first" = false ]; then echo ',' >> dist/extensions.json; fi
+              cat "$ext/manifest.json" >> dist/extensions.json
+              first=false
+            fi
+          done
+          echo ']}' >> dist/extensions.json
+
+      - name: Deploy to website
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          destination_dir: api
+          publish_branch: main
+          keep_files: true
