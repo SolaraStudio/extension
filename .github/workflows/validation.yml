@@ -1,0 +1,49 @@
+name: Validate Extensions
+
+on:
+  pull_request:
+    paths:
+      - 'extensions/**'
+  push:
+    paths:
+      - 'extensions/**'
+
+jobs:
+  validate:
+    name: Validate Extensions
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install -g ajv-cli
+
+      - name: Validate all extensions
+        run: |
+          for ext in extensions/*/; do
+            echo "Validating $ext"
+            if [ ! -f "$ext/manifest.json" ]; then
+              echo "Missing manifest.json in $ext"
+              exit 1
+            fi
+            ajv validate -s schema/extension.schema.json -d "$ext/manifest.json"
+            if [ ! -f "$ext/icon.png" ]; then
+              echo "Missing icon.png in $ext"
+              exit 1
+            fi
+            echo "$ext is valid"
+          done
+
+      - name: Check duplicate IDs
+        run: |
+          IDs=$(jq -r '.id' extensions/*/manifest.json | sort | uniq -d)
+          if [ -n "$IDs" ]; then
+            echo "Duplicate extension IDs found: $IDs"
+            exit 1
+          fi
