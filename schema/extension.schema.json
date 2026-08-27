@@ -1,0 +1,76 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["id", "name", "version", "author", "description", "minAppVersion", "permissions"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$",
+      "description": "Unique identifier, lowercase with hyphens"
+    },
+    "name": {
+      "type": "string",
+      "maxLength": 50,
+      "description": "Display name"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Semantic version"
+    },
+    "author": {
+      "type": "string",
+      "description": "GitHub username"
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 200,
+      "description": "Brief description"
+    },
+    "minAppVersion": {
+      "type": "string",
+      "description": "Minimum Solara version required"
+    },
+    "permissions": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Permissions required"
+    },
+    "hostPermissions": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "URL patterns the extension can access"
+    },
+    "background": {
+      "type": "object",
+      "properties": {
+        "scripts": { "type": "array", "items": { "type": "string" } },
+        "persistent": { "type": "boolean" }
+      }
+    },
+    "contentScripts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "matches": { "type": "array", "items": { "type": "string" } },
+          "js": { "type": "array", "items": { "type": "string" } },
+          "css": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+    "optionsUi": {
+      "type": "object",
+      "properties": {
+        "page": { "type": "string" },
+        "openInTab": { "type": "boolean" }
+      }
+    },
+    "icons": {
+      "type": "object",
+      "patternProperties": {
+        "^[0-9]+$": { "type": "string" }
+      }
+    }
+  }
+}
